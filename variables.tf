@@ -57,7 +57,7 @@ variable "start_on_boot" {
 variable "start_on_create" {
   type        = bool
   description = "Specifies whether the container will be started during after creation."
-  default     = false
+  default     = true
 }
 
 variable "unprivileged" {
@@ -70,6 +70,7 @@ variable "password" {
   type        = string
   description = "The password for the root user in the container."
   default     = null
+  sensitive   = true
 
   validation {
     condition     = var.password != ""
@@ -158,5 +159,14 @@ variable "dns_search_domain" {
 variable "networks" {
   type        = list(any)
   description = "A list of objects defining network interfaces for the container."
-  default     = null
+  default = [{
+    name   = "eth0"
+    bridge = "vmbr0"
+    ip     = "dhcp"
+  }]
+
+  validation {
+    condition     = var.networks != null
+    error_message = "The network list must not be empty."
+  }
 }

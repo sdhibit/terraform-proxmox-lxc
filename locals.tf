@@ -1,13 +1,5 @@
 locals {
 
-  defaults = {
-    primary_network = {
-      name   = "eth0"
-      bridge = "vmbr0"
-      ip     = "dhcp"
-    }
-  }
-
   proxmox_node          = var.proxmox_node
   proxmox_resource_pool = var.proxmox_resource_pool
 
@@ -43,6 +35,6 @@ locals {
   dns_name_server   = var.dns_name_server
   dns_search_domain = var.dns_search_domain
 
-  networks = var.networks != null ? var.networks : [local.defaults.primary_network]
+  networks = var.networks != null ? var.networks : []
 
 }

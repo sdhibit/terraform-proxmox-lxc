@@ -1,6 +1,16 @@
 # terraform-proxmox-lxc
 Terraform module that creates a cloud-init enabled VM in Proxmox.
 
+### Build lxc/lxd images
+```bash
+sudo apt update
+sudo apt install snapd
+sudo snap install core
+sudo snap install lxd
+
+sudo lxd init
+```
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
@@ -32,7 +42,7 @@ Terraform module that creates a cloud-init enabled VM in Proxmox.
 | memory | How much memory, in megabytes, to give the container. | `number` | `1024` | no |
 | mount\_points | A list of objects for defining a volume to use as a container mount point. | `list(any)` | `null` | no |
 | name | The container name. | `string` | n/a | yes |
-| networks | A list of objects defining network interfaces for the container. | `list(any)` | `null` | no |
+| networks | A list of objects defining network interfaces for the container. | `list(any)` | <pre>[<br>  {<br>    "bridge": "vmbr0",<br>    "ip": "dhcp",<br>    "name": "eth0"<br>  }<br>]</pre> | no |
 | os\_template | The volume identifier that points to the OS template or backup file. | `string` | n/a | yes |
 | os\_type | The operating system type, used by LXC to setup and configure the container. Automatically determined if not set. | `string` | `null` | no |
 | password | The password for the root user in the container. | `string` | `null` | no |
@@ -42,7 +52,7 @@ Terraform module that creates a cloud-init enabled VM in Proxmox.
 | rootfs\_size\_gb | Size of the root container volume in gigabytes. | `number` | `8` | no |
 | rootfs\_storage\_volume | The Proxmox volume name to store the container rootfs. | `string` | `"local-lvm"` | no |
 | start\_on\_boot | Specifies whether the container will be started during system bootup. | `bool` | `false` | no |
-| start\_on\_create | Specifies whether the container will be started during after creation. | `bool` | `false` | no |
+| start\_on\_create | Specifies whether the container will be started during after creation. | `bool` | `true` | no |
 | swap\_memory | How much memory, in megabytes, to give to swap in the container. | `number` | `512` | no |
 | unprivileged | Run the container with an unprivileged user. | `bool` | `true` | no |
 
