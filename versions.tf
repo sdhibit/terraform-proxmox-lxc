@@ -1,9 +1,9 @@
 terraform {
-  required_version = ">=0.14"
+  required_version = "~>1.0"
   required_providers {
     proxmox = {
-      source  = "Telmate/proxmox"
-      version = ">=2.6.5"
+      source  = "telmate/proxmox"
+      version = "~>2.9.3"
     }
   }
 }

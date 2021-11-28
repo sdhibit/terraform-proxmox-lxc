@@ -1,5 +1,5 @@
 # terraform-proxmox-lxc
-Terraform module that creates a cloud-init enabled VM in Proxmox.
+Terraform module that creates a lxc container in Proxmox.
 
 ### Build lxc/lxd images
 ```bash
@@ -16,14 +16,24 @@ sudo lxd init
 
 | Name | Version |
 |------|---------|
-| terraform | >=0.14 |
-| proxmox | >=2.6.5 |
+| terraform | ~>1.0 |
+| proxmox | ~>2.9.3 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| proxmox | >=2.6.5 |
+| proxmox | ~>2.9.3 |
+
+## Modules
+
+No Modules.
+
+## Resources
+
+| Name |
+|------|
+| [proxmox_lxc](https://registry.terraform.io/providers/telmate/proxmox/~>2.9.3/docs/resources/lxc) |
 
 ## Inputs
 
@@ -62,5 +72,4 @@ sudo lxd init
 |------|-------------|
 | id | The Proxmox VMID. |
 | name | The lxc host name. |
-
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
