@@ -29,12 +29,20 @@ locals {
   rootfs_size_gb        = var.rootfs_size_gb
   rootfs_storage_volume = var.rootfs_storage_volume
 
-  // TODO: mount points
-  mount_points = var.mount_points != null ? var.mount_points : []
+  mount_points = { for i, mount_point in var.mount_points : i => defaults(mount_point, {
+    acl       = false
+    backup    = false
+    quota     = false
+    replicate = false
+    shared    = false
+  }) }
 
   dns_name_server   = var.dns_name_server
   dns_search_domain = var.dns_search_domain
 
-  networks = var.networks != null ? var.networks : []
+  networks = { for key, network in var.networks : key => defaults(network, {
+    firewall = false
+    ip       = "dhcp"
+  }) }
 
 }

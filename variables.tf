@@ -76,6 +76,11 @@ variable "password" {
     condition     = var.password != ""
     error_message = "The password must not be empty."
   }
+
+  validation {
+    condition     = var.password != null ? length(var.password) >= 5 : true
+    error_message = "The password must be at least 5 characters."
+  }
 }
 
 variable "public_ssh_keys" {
@@ -139,9 +144,29 @@ variable "rootfs_size_gb" {
 }
 
 variable "mount_points" {
-  type        = list(any)
+  type = list(object({
+    mp        = string
+    size      = string
+    storage   = string
+    volume    = optional(string)
+    acl       = optional(bool)
+    backup    = optional(bool)
+    quota     = optional(bool)
+    replicate = optional(bool)
+    shared    = optional(bool)
+  }))
   description = "A list of objects for defining a volume to use as a container mount point."
-  default     = null
+  default     = []
+
+  validation {
+    condition     = var.mount_points != null
+    error_message = "The mount points must not be null."
+  }
+
+  validation {
+    condition     = length(var.mount_points) <= 256
+    error_message = "There must be less than 256 mount points."
+  }
 }
 
 variable "dns_name_server" {
@@ -157,16 +182,28 @@ variable "dns_search_domain" {
 }
 
 variable "networks" {
-  type        = list(any)
-  description = "A list of objects defining network interfaces for the container."
-  default = [{
-    name   = "eth0"
-    bridge = "vmbr0"
-    ip     = "dhcp"
-  }]
+  type = map(object({
+    bridge   = string
+    firewall = optional(bool)
+    gw       = optional(string)
+    gw6      = optional(string)
+    hwaddr   = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    mtu      = optional(string)
+    rate     = optional(number)
+    tag      = optional(number)
+  }))
+  description = "A map of objects defining network interfaces for the container."
+  default = {
+    "eth0" = {
+      bridge = "vmbr0"
+      ip     = "dhcp"
+    }
+  }
 
   validation {
     condition     = var.networks != null
-    error_message = "The network list must not be empty."
+    error_message = "The network map must not be empty."
   }
 }
