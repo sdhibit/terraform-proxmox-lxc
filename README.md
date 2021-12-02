@@ -50,9 +50,9 @@ No Modules.
 | enable\_nesting | Allow nested virtualization. Required for docker. | `bool` | `false` | no |
 | id | The Proxmox VMID of the container. If not set, the next available ID will be used. | `number` | `null` | no |
 | memory | How much memory, in megabytes, to give the container. | `number` | `1024` | no |
-| mount\_points | A list of objects for defining a volume to use as a container mount point. | `list(any)` | `null` | no |
+| mount\_points | A list of objects for defining a volume to use as a container mount point. | <pre>list(object({<br>    mp        = string<br>    size      = string<br>    storage   = string<br>    volume    = optional(string)<br>    acl       = optional(bool)<br>    backup    = optional(bool)<br>    quota     = optional(bool)<br>    replicate = optional(bool)<br>    shared    = optional(bool)<br>  }))</pre> | `[]` | no |
 | name | The container name. | `string` | n/a | yes |
-| networks | A list of objects defining network interfaces for the container. | `list(any)` | <pre>[<br>  {<br>    "bridge": "vmbr0",<br>    "ip": "dhcp",<br>    "name": "eth0"<br>  }<br>]</pre> | no |
+| networks | A map of objects defining network interfaces for the container. | <pre>map(object({<br>    bridge   = string<br>    firewall = optional(bool)<br>    gw       = optional(string)<br>    gw6      = optional(string)<br>    hwaddr   = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    mtu      = optional(string)<br>    rate     = optional(number)<br>    tag      = optional(number)<br>  }))</pre> | <pre>{<br>  "eth0": {<br>    "bridge": "vmbr0",<br>    "ip": "dhcp"<br>  }<br>}</pre> | no |
 | os\_template | The volume identifier that points to the OS template or backup file. | `string` | n/a | yes |
 | os\_type | The operating system type, used by LXC to setup and configure the container. Automatically determined if not set. | `string` | `null` | no |
 | password | The password for the root user in the container. | `string` | `null` | no |

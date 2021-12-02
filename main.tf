@@ -41,11 +41,17 @@ EOF
     for_each = local.mount_points
 
     content {
-      mp      = mountpoint.value.path    //The path to the mount point as seen from inside the container. 
-      size    = mountpoint.value.size    //Size of the underlying volume.
-      slot    = mountpoint.value.slot    //A string containing the number that identifies the mount point
-      key     = mountpoint.value.key     //The number that identifies the mount point (i.e. the n in mp[n]).
-      storage = mountpoint.value.storage //A string containing the volume, directory, or device to be mounted into the container (at the path specified by mp). E.g. local-lvm, local-zfs, local etc.
+      mp        = mountpoint.value.mp
+      size      = mountpoint.value.size
+      slot      = mountpoint.key
+      key       = tonumber(mountpoint.key)
+      storage   = mountpoint.value.storage
+      volume    = mountpoint.value.volume
+      acl       = mountpoint.value.acl
+      backup    = mountpoint.value.backup
+      quota     = mountpoint.value.quota
+      replicate = mountpoint.value.replicate
+      shared    = mountpoint.value.shared
     }
   }
 
@@ -56,17 +62,17 @@ EOF
     for_each = local.networks
 
     content {
-      name     = network.value.name                       //(required) - The name of the network interface as seen from inside the container (e.g. "eth0").
-      bridge   = network.value.bridge                     //- The bridge to attach the network interface to (e.g. "vmbr0").
-      ip       = lookup(network.value, "ip", "dhcp")      //- The IPv4 address of the network interface. Can be a static IPv4 address (in CIDR notation), "dhcp", or "manual".
-      ip6      = lookup(network.value, "ip6", null)       //- The IPv6 address of the network interface. Can be a static IPv6 address (in CIDR notation), "auto", "dhcp", or "manual".
-      gw       = lookup(network.value, "gw", null)        //- The IPv4 address belonging to the network interface's default gateway.
-      gw6      = lookup(network.value, "gw6", null)       //- The IPv6 address of the network interface's default gateway.
-      hwaddr   = lookup(network.value, "hwaddr", null)    //- A string to set a common MAC address with the I/G (Individual/Group) bit not set. Automatically determined if not set.
-      firewall = lookup(network.value, "firewall", false) //- A boolean to enable the firewall on the network interface.
-      mtu      = lookup(network.value, "mtu", null)       //A string to set the MTU on the network interface.
-      rate     = lookup(network.value, "rate", null)      //- A number that sets rate limiting on the network interface (Mbps).
-      tag      = lookup(network.value, "tag", null)       //- A number that specifies the VLAN tag of the network interface. Automatically determined if not set.
+      name     = network.key            # The name of the network interface as seen from inside the container (e.g. "eth0").
+      bridge   = network.value.bridge   # The bridge to attach the network interface to (e.g. "vmbr0").
+      ip       = network.value.ip       # The IPv4 address of the network interface. Can be a static IPv4 address (in CIDR notation), "dhcp", or "manual".
+      ip6      = network.value.ip6      # The IPv6 address of the network interface. Can be a static IPv6 address (in CIDR notation), "auto", "dhcp", or "manual".
+      gw       = network.value.gw       # The IPv4 address belonging to the network interface's default gateway.
+      gw6      = network.value.gw6      # The IPv6 address of the network interface's default gateway.
+      hwaddr   = network.value.hwaddr   # A string to set a common MAC address with the I/G (Individual/Group) bit not set. Automatically determined if not set.
+      firewall = network.value.firewall # A boolean to enable the firewall on the network interface.
+      mtu      = network.value.mtu      # A string to set the MTU on the network interface.
+      rate     = network.value.rate     # A number that sets rate limiting on the network interface (Mbps).
+      tag      = network.value.tag      # A number that specifies the VLAN tag of the network interface. Automatically determined if not set.
     }
   }
 
